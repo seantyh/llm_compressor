@@ -35,7 +35,7 @@ class AECompressorLLM:
     model = LlmModel(probs)
     decoder = AE.Decoder(encoded)
     for sym_idx in range(length_encoded):
-      # probability of the next symbol
+      # probability of the next symbol      
       probability = model.cdf(sym_idx)
 
       # decode symbol

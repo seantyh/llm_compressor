@@ -124,10 +124,10 @@ class Decoder(ArithmeticCoderBase):
       raise AssertionError("Code out of range")
     return symbol
 
-  def shift(self):
+  def shift(self):    
     self.code = ((self.code << 1) & self.state_mask) | self.read_code_bit()
 
-  def underflow(self):
+  def underflow(self):    
     self.code = (self.code & self.half_range) | ((self.code << 1)
                                                  & (self.state_mask >> 1)) | self.read_code_bit()
 
