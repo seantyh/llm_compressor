@@ -1,0 +1,22 @@
+[tool.setuptools]
+package-dir = {""="src"}
+packages = [
+  "llm_compressor"
+]
+
+[project]
+name = "llm_compressor"
+description = "a simple arithmetic compressor for llm logits"
+version = "0.0.1"
+authors = [
+  {name="Sean Tseng", email="seantyh@gmail.com"}
+]
+
+dependencies = [
+  "numpy"
+]
+
+[project.optional-dependencies]
+dev = [
+  "transformers"
+]
