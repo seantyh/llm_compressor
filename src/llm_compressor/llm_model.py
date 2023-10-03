@@ -9,7 +9,7 @@ class Range:
   def __repr__(self):
     return f"[{self.low}, {self.high})"
   
-SCALE_FACTOR = 1e3
+SCALE_FACTOR = 1e6
 MIN_PROB = 1/SCALE_FACTOR
 
 class LlmModel:
