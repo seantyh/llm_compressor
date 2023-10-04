@@ -25,7 +25,6 @@ class LlmModel:
     probs[probs<MIN_PROB] = MIN_PROB
     self.__prob = probs
     self.cdf_buffer = [Range(0,0)] * probs.shape[1]
-    self.dbg = {}
 
   def cdf_loop(self, loc: int):
     # compute cdf from given probability    
@@ -47,7 +46,6 @@ class LlmModel:
     prev_freq = 0
     freqs = np.round(SCALE_FACTOR * probability).astype(np.int64)
     cumufreq = freqs.cumsum().astype(np.int64).tolist()
-    self.dbg["freqs"] = freqs    
     for sym, freq in enumerate(cumufreq):      
       assert freq > prev_freq, f"high <= low at {sym}@{loc}, [{prev_freq}, {freq}) {freqs[sym]}"
       cdf[sym] = Range(prev_freq, freq)
