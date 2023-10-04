@@ -8,8 +8,8 @@ class Range:
   def __repr__(self):
     return f"[{self.low}, {self.high})"
   
-SCALE_FACTOR = 1e6
-MIN_PROB = 1/SCALE_FACTOR
+SCALE_FACTOR = 1e7
+MIN_PROB = 1e-6
 
 class LlmModel:
   """
@@ -25,6 +25,7 @@ class LlmModel:
     probs[probs<MIN_PROB] = MIN_PROB
     self.__prob = probs
     self.cdf_buffer = [Range(0,0)] * probs.shape[1]
+    self.dbg = {}
 
   def cdf_loop(self, loc: int):
     # compute cdf from given probability    
@@ -44,10 +45,11 @@ class LlmModel:
 
     probability = self.__prob[loc].numpy()
     prev_freq = 0
-    freqs = np.round(SCALE_FACTOR * probability).astype(np.int32)
-    cumufreq = freqs.cumsum().astype(np.int32).tolist()
-    
+    freqs = np.round(SCALE_FACTOR * probability).astype(np.int64)
+    cumufreq = freqs.cumsum().astype(np.int64).tolist()
+    self.dbg["freqs"] = freqs    
     for sym, freq in enumerate(cumufreq):      
+      assert freq > prev_freq, f"high <= low at {sym}@{loc}, [{prev_freq}, {freq}) {freqs[sym]}"
       cdf[sym] = Range(prev_freq, freq)
       prev_freq = freq
     # print("time spent on creating cdf: ", t1-t0)

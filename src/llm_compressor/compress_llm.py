@@ -6,12 +6,15 @@ from .llm_model import LlmModel
 
 class AECompressorLLM:
   def __init__(self) -> None:
+    self.encoder = None
+    self.model = None
     pass
   
   def compress(self, input_ids, probs):
-
-    model = LlmModel(probs)
+    self.model = LlmModel(probs)
+    model = self.model
     encoder = AE.Encoder()
+    self.encoder = encoder    
 
     import time
     for sym_idx, symbol in enumerate(input_ids):

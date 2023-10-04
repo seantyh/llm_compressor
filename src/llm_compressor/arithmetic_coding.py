@@ -4,10 +4,10 @@ import collections
 
 STATE_BITS_SIZE = 32
 
-
 class ArithmeticCoderBase:
 
-  def __init__(self, numbits):
+  def __init__(self, numbits, dbg={}):
+    self.dbg = dbg
     if numbits < 1:
       raise ValueError("State size out of range")
 
@@ -36,14 +36,24 @@ class ArithmeticCoderBase:
     total = max(rng.high for rng in probability)
     symlow = probability[symbol].low
     symhigh = probability[symbol].high
-    if symlow == symhigh:      
-      raise ValueError("Symbol has zero frequency")
-    
+    self.dbg["prob"] = probability
+    self.dbg["symbol"] = symbol
+    self.dbg["total"] = total
+    self.dbg["range"] = range
+    self.dbg["oldlow"] = low
+    self.dbg["oldhigh"] = high
+    if symlow == symhigh:   
+      print(symlow, symhigh)   
+      raise ValueError("Symbol has zero frequency")          
+
     newlow = low + symlow * range // total
     newhigh = low + symhigh * range // total - 1
     self.low = newlow
     self.high = newhigh
 
+    self.dbg["newlow"] = newlow
+    self.dbg["newhigh"] = newhigh
+      
     while ((self.low ^ self.high) & self.half_range) == 0:
       self.shift()
       self.low = ((self.low << 1) & self.state_mask)
