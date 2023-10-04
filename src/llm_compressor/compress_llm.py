@@ -7,7 +7,7 @@ from .llm_model import LlmModel
 class AECompressorLLM:
   def __init__(self) -> None:
     pass
-
+  
   def compress(self, input_ids, probs):
 
     model = LlmModel(probs)

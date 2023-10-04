@@ -1,4 +1,3 @@
-import time
 import numpy as np
 import torch
 
@@ -46,12 +45,11 @@ class LlmModel:
     probability = self.__prob[loc].numpy()
     prev_freq = 0
     freqs = np.round(SCALE_FACTOR * probability).astype(np.int32)
-    cumufreq = freqs.cumsum()   
-    t0 = time.perf_counter()          
+    cumufreq = freqs.cumsum().astype(np.int32).tolist()
+    
     for sym, freq in enumerate(cumufreq):      
       cdf[sym] = Range(prev_freq, freq)
       prev_freq = freq
-    t1 = time.perf_counter()
     # print("time spent on creating cdf: ", t1-t0)
     self.cdf_object = cdf        
     return self.cdf_object

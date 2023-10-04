@@ -23,6 +23,7 @@ class ArithmeticCoderBase:
   def update(self, probability, symbol):
     low = self.low
     high = self.high
+    
     if low >= high or (low & self.state_mask) != low or (high & self.state_mask) != high:
       print("low>=high: ", low, high)
       print("(low & self.state_mask) != low: ", (low & self.state_mask) != low)
@@ -37,7 +38,7 @@ class ArithmeticCoderBase:
     symhigh = probability[symbol].high
     if symlow == symhigh:      
       raise ValueError("Symbol has zero frequency")
-
+    
     newlow = low + symlow * range // total
     newhigh = low + symhigh * range // total - 1
     self.low = newlow
@@ -121,6 +122,7 @@ class Decoder(ArithmeticCoderBase):
     self.update(probability, symbol)
 
     if not (self.low <= self.code <= self.high):
+      print("low, code, high: ", self.low, self.code, self.high)
       raise AssertionError("Code out of range")
     return symbol
 
